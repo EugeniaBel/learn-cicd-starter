@@ -35,8 +35,3 @@ func TestGetAPIKey_NoHeader(t *testing.T) {
 	}
 }
 
-func TestGetAPIKey_BrokenTest(t *testing.T) {
-	// This test always fails
-	// Used to verify CI catches failing tests
-	t.Error("This test is broken for CI verification")
-}
