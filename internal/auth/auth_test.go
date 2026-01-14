@@ -34,3 +34,9 @@ func TestGetAPIKey_NoHeader(t *testing.T) {
 		t.Errorf("Should return error when no header, but got nil")
 	}
 }
+
+func TestGetAPIKey_BrokenTest(t *testing.T) {
+	// This test always fails
+	// Used to verify CI catches failing tests
+	t.Error("This test is broken for CI verification")
+}
