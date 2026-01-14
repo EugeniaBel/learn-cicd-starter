@@ -34,4 +34,3 @@ func TestGetAPIKey_NoHeader(t *testing.T) {
 		t.Errorf("Should return error when no header, but got nil")
 	}
 }
-
