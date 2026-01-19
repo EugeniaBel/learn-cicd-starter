@@ -49,8 +49,3 @@ jobs:
       run: |
         docker build --platform linux/amd64 -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-
-    #- name: Deploy to AWS App Runner
-    #  run: |
-    #    aws apprunner start-deployment \
-    #      --service-arn arn:aws:apprunner:eu-central-1:103631804900:service/notely/d6be66b95d69483280735532c01d4698
