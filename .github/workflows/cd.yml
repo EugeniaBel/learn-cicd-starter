@@ -7,6 +7,8 @@ on:
 jobs:
   Deploy:
     runs-on: ubuntu-latest
+    env:
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
     steps:
     - name: Checkout code
@@ -17,8 +19,15 @@ jobs:
       with:
         go-version: '1.25.5'
 
+    - name: Install goose
+      run: go install github.com/pressly/goose/v3/cmd/goose@latest
+
     - name: Build the app
       run: ./scripts/buildprod.sh
+
+    - name: Run database migrations
+      run: |
+        ./scripts/migrateup.sh  
 
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v4
@@ -38,10 +47,10 @@ jobs:
         ECR_REPOSITORY: notely
         IMAGE_TAG: latest
       run: |
-        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+        docker build --platform linux/amd64 -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
     - name: Deploy to AWS App Runner
       run: |
-        # Тут буде команда для деплою на App Runner
-        echo "Deploying to AWS App Runner..."
+        aws apprunner start-deployment \
+          --service-arn arn:aws:apprunner:eu-central-1:103631804900:service/notely/d6be66b95d69483280735532c01d4698
