@@ -87,6 +87,12 @@ func main() {
 	}
 
 	v1Router.Get("/healthz", handlerReadiness)
+	if apiCfg.DB != nil {
+    router.Post("/users", apiCfg.handlerUsersCreate)
+    router.Get("/users", apiCfg.middlewareAuth(apiCfg.handlerUsersGet))
+    router.Get("/notes", apiCfg.middlewareAuth(apiCfg.handlerNotesGet))
+    router.Post("/notes", apiCfg.middlewareAuth(apiCfg.handlerNotesCreate))
+    }
 
 	router.Mount("/v1", v1Router)
 	srv := &http.Server{
