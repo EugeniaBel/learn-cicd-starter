@@ -1,0 +1,7 @@
+.git
+.gitignore
+.idea
+vendor/
+*.log
+.env
+notely
