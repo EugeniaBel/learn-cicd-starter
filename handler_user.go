@@ -5,6 +5,7 @@ import (
     "crypto/sha256"
     "encoding/hex"
     "encoding/json"
+    "log"
     "net/http"
     "time"
 
@@ -39,16 +40,18 @@ func (cfg *apiConfig) handlerUsersCreate(w http.ResponseWriter, r *http.Request)
 
     // Create user in database
     err = cfg.DB.CreateUser(r.Context(), database.CreateUserParams{
-        ID:        userID,
-        CreatedAt: createdAt,
-        UpdatedAt: updatedAt,
-        Name:      params.Name,
-        ApiKey:    apiKey,
-    })
-    if err != nil {
-        respondWithError(w, http.StatusInternalServerError, "Couldn't create user", err)
-        return
-    }
+    ID:        userID,
+    CreatedAt: createdAt,
+    UpdatedAt: updatedAt,
+    Name:      params.Name,
+    ApiKey:    apiKey,
+})
+if err != nil {
+    log.Printf("CreateUser ERROR details: %v", err)
+    log.Printf("CreateUser params: ID=%s, Name=%s, ApiKey=%s", userID, params.Name, apiKey)
+    respondWithError(w, http.StatusInternalServerError, "Couldn't create user", err)
+    return
+}
 
     // Return the created user data (no need to fetch from database)
     respondWithJSON(w, http.StatusCreated, map[string]interface{}{
